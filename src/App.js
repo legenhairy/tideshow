@@ -1,19 +1,20 @@
 import React, { useState, useEffect } from "react";
 import './App.css';
-
 import { Line } from "react-chartjs-2";
 import axios from "axios";
+import DataTable from "./components/DataTable";
 
 function App() {
   const [tideData, setTideData] = useState({});
   //const [tideTime, setTideTime] = useState([]);
   const [tideHeight, setTideHeight] = useState([]); //break it into its own state array
+  const [tideTable, setTideTable] = useState([]); //for the tide table
   const [selectUnits, setSelectUnits] = useState('Meters'); //for the chart label
   const [unitParam, setUnitParam] = useState('metric'); //for the api parameter
   const [userTime, setUserTime] = useState('lst_ldt'); //for the user time zone
   const [datum, setDatum] = useState('MLLW');
   const [station, setStation] = useState('9414290');
-  const [fromDay, setFromDay] = useState('2020');
+  //const [fromDay, setFromDay] = useState('2020');
 
   useEffect(() => {
     getData();
@@ -34,8 +35,7 @@ function App() {
 
     axios.request(axioOptions).then(function(response) {
       console.log(response); //for testing purposes
-      console.log(response.data.predictions);
-
+      setTideTable(response.data.predictions);
       //get the time and date from the t element
       for(const dataObj of response.data.predictions){
         let timeInfo = dataObj.t.split(" "); //the time and date are seperated by whitespace
@@ -63,8 +63,7 @@ function App() {
       });
 
       setTideHeight(tHeights);
-
-
+      
     }).catch(function(error) {
       console.error(error);
     });
@@ -74,7 +73,7 @@ function App() {
     responsive: true,
     title: {
       display: true,
-      text: [`Tide Levels for a Station (MLLW) in ${selectUnits}`, 'Tide Predictions at 9414290, San Francisco Station'],
+      text: [`Tide Levels for a Station (MLLW) in ${selectUnits}`, `Tide Predictions at ${station}, San Francisco Station`],
       fontFamily: 'Arial'
     },
     legend: {
@@ -140,7 +139,7 @@ function App() {
       </div>
       <div className="chooser"> 
         <div className='column1'>
-          <h1>Options For</h1>
+          <h2>Options For</h2>
           <select className='station-selector' defaultValue='9414290' onChange={changeStation}>
             <option value="9414290">9414290 San Francisco</option>
             <option value="9413745">9413745 Santa Cruz,Monterey Bay,CA</option>
@@ -228,28 +227,23 @@ function App() {
             <input type="text" className='to-year' />
           </div>
         <div className='column2'>
-          <h2>Units</h2>
+          <h3>Units</h3>
             <select defaultValue='Meters' onChange={e => handleUnits(e)}>
               <option value='Meters'>Meters</option>
               <option value='Feet'>Feet</option>
             </select>
-          <h2>Timezone</h2>
+          <h3>Timezone</h3>
             <select className='timezone-selector' defaultValue='lst_ldt' onChange={e => changeTimeZone(e)}>
               <option value="gmt">gmt</option>
               <option value="lst">lst</option>
               <option value="lst_ldt">lst_ldt</option>
             </select>
-          <h2>Datum</h2>
+          <h3>Datum</h3>
             <select className='datum-selector' defaultValue='MLLW' onChange={changeDatum}>
               <option>MHHW</option>
               <option>MHW</option>
               <option>MTL</option>
               <option value="MLLW">MLLW</option>
-            </select>
-          <h2>12 Hour/24 Hour Clock</h2>
-            <select className='datum-selector' defaultValue='1'>
-              <option value="1">12 Hour</option>
-              <option value="2">24 Hour</option>
             </select>
         </div>
         <div className="column3">
@@ -261,10 +255,8 @@ function App() {
           <button>Plot Calendar</button>
         </div>
       </div>
+      <DataTable data={tideTable} units={selectUnits} zone={userTime} />
 
-      <div className="data-listings">
-        Table will eventually go here 
-      </div>
     </div>
   );
 }
