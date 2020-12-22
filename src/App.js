@@ -3,6 +3,7 @@ import './App.css';
 import { Line } from "react-chartjs-2";
 import axios from "axios";
 import DataTable from "./components/DataTable";
+import CsvDownloader from 'react-csv-downloader';
 
 function App() {
   const [tideData, setTideData] = useState({});
@@ -131,6 +132,17 @@ function App() {
     setDatum(e.target.value);
   };
 
+  const columns = [{
+    id: 't',
+    displayName: 'First column'
+  }, {
+    id: 'v',
+    displayName: 'Second column'
+  }, {
+    id: 'type',
+    displayName: 'Third column'
+  }];
+
   return (
     <div className="App">
       <h2>Weekly Tide Levels in MSL datum</h2>
@@ -247,16 +259,27 @@ function App() {
             </select>
         </div>
         <div className="column3">
-          <h2>Shift Dates</h2>
+          <h3>Shift Dates</h3>
           <button className='back-date'>Back 1 Day</button>
           <button className="forward-date">Forward 1 Day</button>
-          <h2>Update</h2>
+          <h3>Update</h3>
           <button className='daily-submit' onClick={getData}>Plot Daily</button>
           <button>Plot Calendar</button>
         </div>
       </div>
+      <div className='data-header'>
+        <h4>Data Listings</h4>
+        <CsvDownloader 
+          text="Download as CSV" 
+          filename="tide-data"
+          separator=";"
+          columns={columns}
+          data={tideData} 
+          />
+      </div>
+    
       <DataTable data={tideTable} units={selectUnits} zone={userTime} />
-
+      <h4>Disclaimer: This data is based on the latest info available as of the time of your request.</h4>
     </div>
   );
 }
