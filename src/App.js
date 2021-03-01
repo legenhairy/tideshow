@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import './App.css';
 import { Line } from "react-chartjs-2";
 import axios from "axios";
+import Lottie from "react-lottie";
+import twowaves from './lotties/blue-waves.json';
 import DataTable from "./components/DataTable";
 import CsvDownloader from 'react-csv-downloader';
 
@@ -26,11 +28,26 @@ function App() {
     let tHeights = [];
     let tDay = [];
     
+    //on initial call, use the current date for the from date parameter
+    const today = new Date();
+    
+    let mon = today.getMonth() + 1; 
+    //reformat the month and day - add a 0 in front of them if < 10 value
+    if(mon < 10) {
+      mon = "0" + mon.toString();
+    }
+    let day = today.getDate();
+    if(day < 10) {
+      day = "0" + day.toString();
+    }
+
+    let fromDate = today.getFullYear().toString() + mon + day;
+
     //make the api call for the noaa tide prediction api
     const axioOptions = {
       method: 'GET',
       url: 'https://api.tidesandcurrents.noaa.gov/api/prod/datagetter',
-      params: {station: `${station}`, begin_date: '20201215', end_date: '20201221', product: 'predictions', datum: `${datum}`,
+      params: {station: `${station}`, begin_date: `${fromDate}`, end_date: '20210307', product: 'predictions', datum: `${datum}`,
         units: `${unitParam}`, time_zone: `${userTime}`, interval: 'hilo', format: 'json'},
     };
 
@@ -134,14 +151,23 @@ function App() {
 
   const columns = [{
     id: 't',
-    displayName: 'First column'
+    displayName: 'Time'
   }, {
     id: 'v',
-    displayName: 'Second column'
+    displayName: 'Predicted Height'
   }, {
     id: 'type',
-    displayName: 'Third column'
+    displayName: 'High/Low'
   }];
+
+  const defaultOptions = {
+    loop: true,
+    autoplay: true,
+    animationData: twowaves,
+    rendererSettings: {
+      preserveAspectRatio: "xMidYMid slice"
+    }
+  };
 
   return (
     <div className="App">
@@ -154,12 +180,12 @@ function App() {
           <h2>Options For</h2>
           <select className='station-selector' defaultValue='9414290' onChange={changeStation}>
             <option value="9414290">9414290 San Francisco</option>
-            <option value="9413745">9413745 Santa Cruz,Monterey Bay,CA</option>
+            <option value="9413745">9413745 Santa Cruz, Monterey Bay,CA</option>
             <option value="9414275">9414275 Ocean Beach, Outer Coast, CA</option>
             <option value="9414806">9414806 Sausalito, San Francisco, CA</option>
           </select>
           <h2>From:</h2>
-            <select className='month-selector' defaultValue='December'>
+            <select className='month-selector' defaultValue='Feb'>
               <option value="Jan">January</option>
               <option value="Feb">Feburary</option>
               <option value="March">March</option>
@@ -172,7 +198,7 @@ function App() {
               <option value="November">November</option>
               <option value="December">December</option>
             </select>
-            <select className='day-selector' defaultValue='16'>
+            <select className='day-selector' defaultValue='24'>
               <option value="1">1</option>
               <option value="2">2</option>
               <option value="3">3</option>
@@ -194,10 +220,20 @@ function App() {
               <option value="19">19</option>
               <option value="20">20</option>
               <option value="21">21</option>
+              <option value="21">22</option>
+              <option value="21">23</option>
+              <option value="21">24</option>
+              <option value="21">25</option>
             </select>
-            <input type="text" className='from-year' />
+            <select className='year-selector' defaultValue='2020'>
+              <option value="2020">2020</option>
+              <option value="2021">2021</option>
+              <option value="2022">2022</option>
+              <option value="2023">2023</option>
+              <option value="2024">2024</option>
+            </select>
           <h2>To:</h2>
-            <select className='month-selector' defaultValue='December'>
+            <select className='month-selector' defaultValue='Feb'>
               <option value="Jan">January</option>
               <option value="Feb">Feburary</option>
               <option value="March">March</option>
@@ -210,7 +246,7 @@ function App() {
               <option value="November">November</option>
               <option value="December">December</option>
             </select>
-            <select className='day-selector'>
+            <select className='day-selector' defaultValue='20'>
               <option value="1">1</option>
               <option value="2">2</option>
               <option value="3">3</option>
@@ -236,7 +272,13 @@ function App() {
               <option value="23">23</option>
               <option value="24">24</option>
             </select>
-            <input type="text" className='to-year' />
+            <select className='year-selector' defaultValue='2020'>
+              <option value="2020">2020</option>
+              <option value="2021">2021</option>
+              <option value="2022">2022</option>
+              <option value="2023">2023</option>
+              <option value="2024">2024</option>
+            </select>
           </div>
         <div className='column2'>
           <h3>Units</h3>
@@ -277,9 +319,22 @@ function App() {
           data={tideData} 
           />
       </div>
-    
-      <DataTable data={tideTable} units={selectUnits} zone={userTime} />
-      <h4>Disclaimer: This data is based on the latest info available as of the time of your request.</h4>
+
+      <div className="container">
+        <header className="tide-title">Tides</header>
+        <div className="main-content">
+          <div className='column2'>
+            <h3>Units</h3>
+              <select defaultValue='Meters' onChange={e => handleUnits(e)}>
+                <option value='Meters'>Meters</option>
+                <option value='Feet'>Feet</option>
+              </select>
+          </div>
+        </div>
+        <Lottie className="bottom-wave" options={defaultOptions} />
+      </div>
+      
+      { /* <DataTable data={tideTable} units={selectUnits} zone={userTime} /> */}
     </div>
   );
 }

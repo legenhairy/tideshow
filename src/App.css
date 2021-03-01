@@ -43,3 +43,33 @@
   border-width: 2px;
   background-color: rgb(214, 236, 218);
 }
+
+/*styling for the new grid homepage*/
+.tide-title {
+  text-align: center;
+  grid-area: header;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.main-content {
+  grid-area: main;
+}
+
+.bottom-wave {
+  grid-area: footer;
+}
+
+.container {
+  background-color:rgb(46, 170, 68);
+  min-height: 100vh;
+  margin: auto;
+  border-style: solid;
+  border-width: 2px;
+  display: grid;
+  grid-template-columns: 33% 33% 33%;
+  grid-template-rows: auto;
+  grid-template-areas: 
+    "header header header"
+    "main main main"
+    "footer footer footer";
+}
