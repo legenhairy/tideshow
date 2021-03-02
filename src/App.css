@@ -2,27 +2,17 @@
   text-align: center;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.chooser-1 {
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  flex-wrap: wrap;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.chooser {
-  display: flex;
+  background-color: whitesmoke;
   padding: 20px;
-  margin-bottom: 100px;
-  background-color: dimgrey;
   margin-left: 80px;
   margin-right: 80px;
 }
 
-.column1 {
+/* .column1 {
   width: 33%;
 }
 
@@ -32,7 +22,7 @@
 
 .column3 {
   width: 33%;
-}
+} */
 
 .chart-container {
   display: flex;
@@ -44,11 +34,27 @@
   background-color: rgb(214, 236, 218);
 }
 
+.search-tides {
+  background-color: rgb(16, 176, 224);
+  border: none;
+  color: white;
+  margin-left: 15px;
+  padding: 15px 40px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  letter-spacing: 5px;
+}
+
 /*styling for the new grid homepage*/
 .tide-title {
-  text-align: center;
   grid-area: header;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: Helvetica;
+  color: whitesmoke;
+  letter-spacing: 40px;
+  font-size: 100px;
+  font-weight: lighter;
+  padding-bottom: 20px;
 }
 
 .main-content {
@@ -56,20 +62,19 @@
 }
 
 .bottom-wave {
-  grid-area: footer;
-}
+  grid-area: bottom;
+} 
 
-.container {
-  background-color:rgb(46, 170, 68);
-  min-height: 100vh;
-  margin: auto;
-  border-style: solid;
-  border-width: 2px;
+.grid-container {
   display: grid;
-  grid-template-columns: 33% 33% 33%;
+  background-color:rgb(16, 176, 224);
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden; /*to clip the extra wave animation*/
+  grid-template-columns: 33% 33% 34%;
   grid-template-rows: auto;
   grid-template-areas: 
     "header header header"
     "main main main"
-    "footer footer footer";
+    "bottom bottom bottom";
 }

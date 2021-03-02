@@ -2,8 +2,7 @@ import React, { useState, useEffect } from "react";
 import './App.css';
 import { Line } from "react-chartjs-2";
 import axios from "axios";
-import Lottie from "react-lottie";
-import twowaves from './lotties/blue-waves.json';
+import Waves from './components/Waves';
 import DataTable from "./components/DataTable";
 import CsvDownloader from 'react-csv-downloader';
 
@@ -19,11 +18,12 @@ function App() {
   const [station, setStation] = useState('9414290');
   //const [fromDay, setFromDay] = useState('2020');
 
-  useEffect(() => {
-    getData();
-  }, [station]); //recall the api if units change
+  // useEffect(() => {
+  //   getData();
+  // }, [station]); //recall the api if units change
 
   const getData = () => {
+    console.log('testing 123')
     //make the axios request, i mainly want the time data and their tide height properties
     let tHeights = [];
     let tDay = [];
@@ -160,22 +160,13 @@ function App() {
     displayName: 'High/Low'
   }];
 
-  const defaultOptions = {
-    loop: true,
-    autoplay: true,
-    animationData: twowaves,
-    rendererSettings: {
-      preserveAspectRatio: "xMidYMid slice"
-    }
-  };
-
   return (
     <div className="App">
-      <h2>Weekly Tide Levels in MSL datum</h2>
-      <div className="chart-container"> 
+      
+      {/* <div className="chart-container"> 
         <Line data={tideData} options={options} />
-      </div>
-      <div className="chooser"> 
+      </div> */}
+      {/* <div className="chooser"> 
         <div className='column1'>
           <h2>Options For</h2>
           <select className='station-selector' defaultValue='9414290' onChange={changeStation}>
@@ -220,10 +211,10 @@ function App() {
               <option value="19">19</option>
               <option value="20">20</option>
               <option value="21">21</option>
-              <option value="21">22</option>
-              <option value="21">23</option>
-              <option value="21">24</option>
-              <option value="21">25</option>
+              <option value="22">22</option>
+              <option value="23">23</option>
+              <option value="24">24</option>
+              <option value="25">25</option>
             </select>
             <select className='year-selector' defaultValue='2020'>
               <option value="2020">2020</option>
@@ -318,22 +309,135 @@ function App() {
           columns={columns}
           data={tideData} 
           />
-      </div>
+      </div> */}
 
-      <div className="container">
-        <header className="tide-title">Tides</header>
-        <div className="main-content">
-          <div className='column2'>
-            <h3>Units</h3>
-              <select defaultValue='Meters' onChange={e => handleUnits(e)}>
-                <option value='Meters'>Meters</option>
-                <option value='Feet'>Feet</option>
+      <div className="grid-container">
+        <header className="tide-title">TIDES</header>
+        <div className="main-content"> 
+          <div className="chooser-1">
+            <h2>Station Name</h2>
+            <select className='station-selector' defaultValue='9414290' onChange={changeStation}>
+              <option value="9414290">9414290 San Francisco</option>
+              <option value="9413745">9413745 Santa Cruz, Monterey Bay,CA</option>
+              <option value="9414275">9414275 Ocean Beach, Outer Coast, CA</option>
+              <option value="9414806">9414806 Sausalito, San Francisco, CA</option>
+            </select>
+            <h2>From:</h2>
+              <select className='month-selector' defaultValue='Feb'>
+                <option value="Jan">January</option>
+                <option value="Feb">Feburary</option>
+                <option value="March">March</option>
+                <option value="April">April</option>
+                <option value="June">June</option>
+                <option value="July">July</option>
+                <option value="August">August</option>
+                <option value="September">September</option>
+                <option value="October">October</option>
+                <option value="November">November</option>
+                <option value="December">December</option>
               </select>
-          </div>
+              <select className='day-selector' defaultValue='24'>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+                <option value="13">13</option>
+                <option value="14">14</option>
+                <option value="15">15</option>
+                <option value="16">16</option>
+                <option value="17">17</option>
+                <option value="18">18</option>
+                <option value="19">19</option>
+                <option value="20">20</option>
+                <option value="21">21</option>
+                <option value="22">22</option>
+                <option value="23">23</option>
+                <option value="24">24</option>
+                <option value="25">25</option>
+              </select>
+              <select className='year-selector' defaultValue='2020'>
+                <option value="2020">2020</option>
+                <option value="2021">2021</option>
+                <option value="2022">2022</option>
+                <option value="2023">2023</option>
+                <option value="2024">2024</option>
+              </select>
+            <h2>To:</h2>
+              <select className='month-selector' defaultValue='Feb'>
+                <option value="Jan">January</option>
+                <option value="Feb">Feburary</option>
+                <option value="March">March</option>
+                <option value="April">April</option>
+                <option value="June">June</option>
+                <option value="July">July</option>
+                <option value="August">August</option>
+                <option value="September">September</option>
+                <option value="October">October</option>
+                <option value="November">November</option>
+                <option value="December">December</option>
+              </select>
+              <select className='day-selector' defaultValue='20'>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+                <option value="13">13</option>
+                <option value="14">14</option>
+                <option value="15">15</option>
+                <option value="16">16</option>
+                <option value="17">17</option>
+                <option value="18">18</option>
+                <option value="19">19</option>
+                <option value="20">20</option>
+                <option value="21">21</option>
+                <option value="22">22</option>
+                <option value="23">23</option>
+                <option value="24">24</option>
+              </select>
+  
+            <h3>Units</h3>
+            <select defaultValue='Meters' onChange={e => handleUnits(e)}>
+              <option value='Meters'>Meters</option>
+              <option value='Feet'>Feet</option>
+            </select>
+            <h3>Timezone</h3>
+            <select className='timezone-selector' defaultValue='lst_ldt' onChange={e => changeTimeZone(e)}>
+              <option value="gmt">gmt</option>
+              <option value="lst">lst</option>
+              <option value="lst_ldt">lst_ldt</option>
+            </select>
+            <h3>Datum</h3>
+            <select className='datum-selector' defaultValue='MLLW' onChange={changeDatum}>
+              <option>MHHW</option>
+              <option>MHW</option>
+              <option>MTL</option>
+              <option value="MLLW">MLLW</option>
+            </select>
+            <button className='search-tides' onClick={getData}>FIND YOUR TIDE</button>
+            
+          </div>  
         </div>
-        <Lottie className="bottom-wave" options={defaultOptions} />
+        <div className='bottom-wave'> {/* wrap the animated wave with a container- looks better visually, otherwise it looks cut off*/}
+          <Waves />
+        </div>
+        
       </div>
-      
       { /* <DataTable data={tideTable} units={selectUnits} zone={userTime} /> */}
     </div>
   );
