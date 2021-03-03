@@ -2,7 +2,10 @@ import React, { useState, useEffect } from "react";
 import './App.css';
 import { Line } from "react-chartjs-2";
 import axios from "axios";
+import Lottie from 'react-lottie';
+import loader from './lotties/water-loader.json';
 import Waves from './components/Waves';
+import WaveLoader from './components/WaveLoader';
 import DataTable from "./components/DataTable";
 import CsvDownloader from 'react-csv-downloader';
 
@@ -17,13 +20,11 @@ function App() {
   const [datum, setDatum] = useState('MLLW');
   const [station, setStation] = useState('9414290');
   //const [fromDay, setFromDay] = useState('2020');
+  const [isLoading, setIsLoading] = useState(false);
 
-  // useEffect(() => {
-  //   getData();
-  // }, [station]); //recall the api if units change
 
   const getData = () => {
-    console.log('testing 123')
+    setIsLoading(true); //trigger the loading screen 
     //make the axios request, i mainly want the time data and their tide height properties
     let tHeights = [];
     let tDay = [];
@@ -43,6 +44,8 @@ function App() {
 
     let fromDate = today.getFullYear().toString() + mon + day;
 
+    /*by default, set the end date 7 days after the fromDate*/ 
+
     //make the api call for the noaa tide prediction api
     const axioOptions = {
       method: 'GET',
@@ -53,6 +56,7 @@ function App() {
 
     axios.request(axioOptions).then(function(response) {
       console.log(response); //for testing purposes
+      setIsLoading(false);
       setTideTable(response.data.predictions);
       //get the time and date from the t element
       for(const dataObj of response.data.predictions){
@@ -149,6 +153,7 @@ function App() {
     setDatum(e.target.value);
   };
 
+
   const columns = [{
     id: 't',
     displayName: 'Time'
@@ -160,12 +165,22 @@ function App() {
     displayName: 'High/Low'
   }];
 
+  const defaultOptions = {
+    loop: true,
+    autoplay: true,
+    animationData: loader,
+    rendererSettings: {
+      preserveAspectRatio: "xMidYMid slice"
+    }
+};
+
+
   return (
     <div className="App">
-      
-      {/* <div className="chart-container"> 
+      {/* show this when the tideData is actually filled, after the api gets called (in place of the filters box?)*/}
+      <div className="chart-container"> 
         <Line data={tideData} options={options} />
-      </div> */}
+      </div>
       {/* <div className="chooser"> 
         <div className='column1'>
           <h2>Options For</h2>
@@ -314,15 +329,18 @@ function App() {
       <div className="grid-container">
         <header className="tide-title">TIDES</header>
         <div className="main-content"> 
-          <div className="chooser-1">
-            <h2>Station Name</h2>
-            <select className='station-selector' defaultValue='9414290' onChange={changeStation}>
-              <option value="9414290">9414290 San Francisco</option>
-              <option value="9413745">9413745 Santa Cruz, Monterey Bay,CA</option>
-              <option value="9414275">9414275 Ocean Beach, Outer Coast, CA</option>
-              <option value="9414806">9414806 Sausalito, San Francisco, CA</option>
-            </select>
-            <h2>From:</h2>
+          <div className="row">
+            <div>
+              <h2>Station Name</h2>
+              <select className='station-selector' defaultValue='9414290' onChange={changeStation}>
+                <option value="9414290">9414290 San Francisco</option>
+                <option value="9413745">9413745 Santa Cruz, Monterey Bay,CA</option>
+                <option value="9414275">9414275 Ocean Beach, Outer Coast, CA</option>
+                <option value="9414806">9414806 Sausalito, San Francisco, CA</option>
+              </select>
+            </div>
+            <div>
+              <h2 className='from-select'>From:</h2>
               <select className='month-selector' defaultValue='Feb'>
                 <option value="Jan">January</option>
                 <option value="Feb">Feburary</option>
@@ -363,14 +381,9 @@ function App() {
                 <option value="24">24</option>
                 <option value="25">25</option>
               </select>
-              <select className='year-selector' defaultValue='2020'>
-                <option value="2020">2020</option>
-                <option value="2021">2021</option>
-                <option value="2022">2022</option>
-                <option value="2023">2023</option>
-                <option value="2024">2024</option>
-              </select>
-            <h2>To:</h2>
+            </div>
+            <div>
+              <h2 className='to-select'>To:</h2>
               <select className='month-selector' defaultValue='Feb'>
                 <option value="Jan">January</option>
                 <option value="Feb">Feburary</option>
@@ -410,27 +423,38 @@ function App() {
                 <option value="23">23</option>
                 <option value="24">24</option>
               </select>
-  
-            <h3>Units</h3>
-            <select defaultValue='Meters' onChange={e => handleUnits(e)}>
-              <option value='Meters'>Meters</option>
-              <option value='Feet'>Feet</option>
-            </select>
-            <h3>Timezone</h3>
-            <select className='timezone-selector' defaultValue='lst_ldt' onChange={e => changeTimeZone(e)}>
-              <option value="gmt">gmt</option>
-              <option value="lst">lst</option>
-              <option value="lst_ldt">lst_ldt</option>
-            </select>
-            <h3>Datum</h3>
-            <select className='datum-selector' defaultValue='MLLW' onChange={changeDatum}>
-              <option>MHHW</option>
-              <option>MHW</option>
-              <option>MTL</option>
-              <option value="MLLW">MLLW</option>
-            </select>
-            <button className='search-tides' onClick={getData}>FIND YOUR TIDE</button>
-            
+            </div>
+          </div>
+          <div className="row">
+              <div>
+                <h3>Units</h3>
+                <select defaultValue='Meters' onChange={e => handleUnits(e)}>
+                  <option value='Meters'>Meters</option>
+                  <option value='Feet'>Feet</option>
+                </select>
+              </div>
+              
+              <div>
+                <h3>Timezone</h3>
+                <select className='timezone-selector' defaultValue='lst_ldt' onChange={e => changeTimeZone(e)}>
+                  <option value="gmt">gmt</option>
+                  <option value="lst">lst</option>
+                  <option value="lst_ldt">lst_ldt</option>
+                </select>
+              </div>
+
+              <div>
+                <h3>Datum</h3>
+                <select className='datum-selector' defaultValue='MLLW' onChange={changeDatum}>
+                  <option>MHHW</option>
+                  <option>MHW</option>
+                  <option>MTL</option>
+                  <option value="MLLW">MLLW</option>
+                </select>
+              </div>
+              <button className='search-tides' onClick={getData}>
+                {isLoading ? <Lottie options={defaultOptions} /> : 'GET YOUR TIDE'}
+              </button>
           </div>  
         </div>
         <div className='bottom-wave'> {/* wrap the animated wave with a container- looks better visually, otherwise it looks cut off*/}
@@ -438,7 +462,6 @@ function App() {
         </div>
         
       </div>
-      { /* <DataTable data={tideTable} units={selectUnits} zone={userTime} /> */}
     </div>
   );
 }

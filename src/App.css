@@ -2,27 +2,14 @@
   text-align: center;
 }
 
-.chooser-1 {
+.row {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  flex-direction: row;
+  justify-content: space-evenly;
+  
   background-color: whitesmoke;
-  padding: 20px;
-  margin-left: 80px;
-  margin-right: 80px;
+  padding: 10px;
 }
-
-/* .column1 {
-  width: 33%;
-}
-
-.column2 {
-  width: 33%;
-}
-
-.column3 {
-  width: 33%;
-} */
 
 .chart-container {
   display: flex;
@@ -38,11 +25,9 @@
   background-color: rgb(16, 176, 224);
   border: none;
   color: white;
-  margin-left: 15px;
   padding: 15px 40px;
   text-align: center;
   text-decoration: none;
-  display: inline-block;
   letter-spacing: 5px;
 }
 
@@ -57,8 +42,9 @@
   padding-bottom: 20px;
 }
 
-.main-content {
+.main-content { /*i want this to be the flexbox or contain a flexbox*/
   grid-area: main;
+  padding-top: 20px;
 }
 
 .bottom-wave {
@@ -77,4 +63,13 @@
     "header header header"
     "main main main"
     "bottom bottom bottom";
+}
+
+.loader-container {
+  display: flex;
+  align-items: 'center';
+  justify-content: 'center';
+  height: 100vh;
+  width: 100vw;
+  background: turquoise;
 }
