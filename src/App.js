@@ -11,7 +11,6 @@ import CsvDownloader from 'react-csv-downloader';
 
 function App() {
   const [tideData, setTideData] = useState({});
-  //const [tideTime, setTideTime] = useState([]);
   const [tideHeight, setTideHeight] = useState([]); //break it into its own state array
   const [tideTable, setTideTable] = useState([]); //for the tide table
   const [selectUnits, setSelectUnits] = useState('Meters'); //for the chart label
@@ -21,7 +20,7 @@ function App() {
   const [station, setStation] = useState('9414290');
   //const [fromDay, setFromDay] = useState('2020');
   const [isLoading, setIsLoading] = useState(false);
-
+  const [showChart, setShowChart] = useState(false); //for the rendering of the chart first time, then each state update just rerenders the chart
 
   const getData = () => {
     setIsLoading(true); //trigger the loading screen 
@@ -50,7 +49,7 @@ function App() {
     const axioOptions = {
       method: 'GET',
       url: 'https://api.tidesandcurrents.noaa.gov/api/prod/datagetter',
-      params: {station: `${station}`, begin_date: `${fromDate}`, end_date: '20210307', product: 'predictions', datum: `${datum}`,
+      params: {station: `${station}`, begin_date: `${fromDate}`, end_date: '20210310', product: 'predictions', datum: `${datum}`,
         units: `${unitParam}`, time_zone: `${userTime}`, interval: 'hilo', format: 'json'},
     };
 
@@ -58,6 +57,7 @@ function App() {
       console.log(response); //for testing purposes
       setIsLoading(false);
       setTideTable(response.data.predictions);
+      displayChart(); //switch on the chart element
       //get the time and date from the t element
       for(const dataObj of response.data.predictions){
         let timeInfo = dataObj.t.split(" "); //the time and date are seperated by whitespace
@@ -92,6 +92,7 @@ function App() {
   }
 
   const options = {
+    maintainAspectRatio: false,
     responsive: true,
     title: {
       display: true,
@@ -153,6 +154,12 @@ function App() {
     setDatum(e.target.value);
   };
 
+  //show the chart ONLY on the button click, prevent it from appearing until the FIRST button press
+  const displayChart = () => {
+    if(showChart === false) { //i dont want the button to act like a toggle between on and off
+      setShowChart(true);
+    }
+  }
 
   const columns = [{
     id: 't',
@@ -178,9 +185,9 @@ function App() {
   return (
     <div className="App">
       {/* show this when the tideData is actually filled, after the api gets called (in place of the filters box?)*/}
-      <div className="chart-container"> 
+      {/* <div className="chart-container"> 
         <Line data={tideData} options={options} />
-      </div>
+      </div> */}
       {/* <div className="chooser"> 
         <div className='column1'>
           <h2>Options For</h2>
@@ -455,7 +462,14 @@ function App() {
               <button className='search-tides' onClick={getData}>
                 {isLoading ? <Lottie options={defaultOptions} /> : 'GET YOUR TIDE'}
               </button>
-          </div>  
+          </div> 
+          {/* place the chart container here only if the button has been clicked */}
+          {showChart ? 
+            <div className="chart-container"> 
+              <Line data={tideData} options={options} />
+            </div>
+            : null
+          }
         </div>
         <div className='bottom-wave'> {/* wrap the animated wave with a container- looks better visually, otherwise it looks cut off*/}
           <Waves />
