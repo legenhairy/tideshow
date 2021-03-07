@@ -5,17 +5,23 @@
 .row {
   display: flex;
   flex-direction: row;
-  justify-content: space-evenly;
-  
+  justify-content: space-around;
+  padding: 1rem;
   background-color: whitesmoke;
   padding: 10px;
+}
+/*mobile view for the flexbox containers*/
+@media only screen and (max-width: 550px) {
+  .row {
+    flex-direction: column;
+  }
 }
 
 .chart-container {
   display: flex;
   justify-content: center;
   margin: 80px;
-  height: 50%;
+  /* height: 50%; */
   border-style: solid;
   border-width: 2px;
   background-color: rgb(214, 236, 218);
@@ -54,7 +60,6 @@
   display: grid;
   background-color:rgb(16, 176, 224);
   height: 100vh;
-  width: 100vw;
   overflow: hidden; /*to clip the extra wave animation*/
   grid-template-columns: 20% 20% 20% 20% 20%;
   grid-template-rows: auto;
@@ -63,6 +68,19 @@
     ". main main main ."
     "bottom bottom bottom bottom bottom"
     "bottom bottom bottom bottom bottom";
+  text-align: center;
+}
+
+/*mobile styles for grid*/
+@media only screen and (max-width: 550px) {
+  .grid-container {
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: auto;
+    grid-template-areas: 
+      ". header ."
+      ". main ."
+      "bottom bottom bottom";
+  }
 }
 
 .loader-container {
