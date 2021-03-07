@@ -92,11 +92,10 @@ function App() {
   }
 
   const options = {
-    maintainAspectRatio: false,
     responsive: true,
     title: {
       display: true,
-      text: [`Tide Levels for a Station (MLLW) in ${selectUnits}`, `Tide Predictions at ${station}, San Francisco Station`],
+      text: [`Tide Levels in ${selectUnits}`, `Tide Predictions at ${station}, San Francisco Station`],
       fontFamily: 'Arial'
     },
     legend: {
