@@ -1,29 +1,23 @@
-.App {
-  text-align: center;
-}
-
 .row {
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
-  padding: 1rem;
+  /* justify-content: space-around; */
   background-color: whitesmoke;
+  padding: 2em;
 }
 /*mobile view for the flexbox containers*/
-@media only screen and (max-width: 550px) {
+/*@media only screen and (max-width: 550px) {
   .row {
     flex-direction: column;
     margin-bottom: 1rem;
   }
-}
+}*/
 
 .chart-container {
   display: flex;
   justify-content: center;
   margin: 80px;
-  height: 20rem;
-  border-style: solid;
-  border-width: 2px;
+  height: 40vh;
   background-color: rgb(214, 236, 218);
 }
 
@@ -31,7 +25,6 @@
   background-color: rgb(16, 176, 224);
   border: none;
   color: white;
-  padding: 15px 40px;
   text-align: center;
   text-decoration: none;
   letter-spacing: 5px;
@@ -42,37 +35,37 @@
   grid-area: header;
   font-family: Helvetica;
   color: whitesmoke;
-  letter-spacing: 40px;
+  letter-spacing: 50px;
+  text-align: center;
   font-size: 10vw;
   font-weight: lighter;
-  padding-bottom: 20px;
 }
 
-.main-content { /*i want this to be the flexbox or contain a flexbox*/
+.main-content {
+  /*i want this to be the flexbox or contain a flexbox*/
   grid-area: main;
 }
 
 .bottom-wave {
   grid-area: bottom;
-} 
+}
 
 .grid-container {
   display: grid;
-  background-color:rgb(16, 176, 224);
+  background-color: rgb(16, 176, 224);
   height: 100vh;
   overflow: hidden; /*to clip the extra wave animation*/
   grid-template-columns: 20% 20% 20% 20% 20%;
   grid-template-rows: auto;
-  grid-template-areas: 
-    "header header header header header"
+  grid-template-areas:
+    ". header header header ."
     ". main main main ."
-    "bottom bottom bottom bottom bottom"
+    ". main main main ."
     "bottom bottom bottom bottom bottom";
-  text-align: center;
 }
 
 /*mobile styles for grid*/
-@media only screen and (max-width: 550px) {
+/* @media only screen and (max-width: 550px) {
   .grid-container {
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: auto;
@@ -81,13 +74,18 @@
       ". main ."
       "bottom bottom bottom";
   }
-}
+} */
 
 .loader-container {
   display: flex;
-  align-items: 'center';
-  justify-content: 'center';
+  align-items: "center";
+  justify-content: "center";
   height: 100vh;
   width: 100vw;
   background: turquoise;
+}
+
+.btn-outline:hover {
+  background: #4fbfa8;
+  color: #ffffff;
 }
