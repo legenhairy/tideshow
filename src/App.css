@@ -1,5 +1,4 @@
 .row {
-  display: flex;
   flex-direction: row;
   /* justify-content: space-around; */
   background-color: whitesmoke;
@@ -13,11 +12,22 @@
   }
 }*/
 
+.top-row {
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+}
+
+.bottom-row {
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+}
+
 .chart-container {
   display: flex;
   justify-content: center;
-  margin: 80px;
-  height: 40vh;
+  margin: 30px;
+  height: 40%;
+  width: auto;
   background-color: rgb(214, 236, 218);
 }
 
@@ -35,9 +45,9 @@
   grid-area: header;
   font-family: Helvetica;
   color: whitesmoke;
-  letter-spacing: 50px;
+  letter-spacing: 1em;
   text-align: center;
-  font-size: 10vw;
+  font-size: 5vw;
   font-weight: lighter;
 }
 
