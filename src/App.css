@@ -2,7 +2,7 @@
   flex-direction: row;
   /* justify-content: space-around; */
   background-color: whitesmoke;
-  padding: 2em;
+  padding: 1.75em;
 }
 /*mobile view for the flexbox containers*/
 /*@media only screen and (max-width: 550px) {
@@ -24,17 +24,19 @@
 
 .chart-container {
   display: flex;
-  justify-content: center;
-  margin: 30px;
+  /* justify-content: center;
+  align-items: center; */
+  margin: 0.5em;
   height: 40%;
-  width: auto;
+  /* width: auto; */
   background-color: rgb(214, 236, 218);
 }
 
+/*Button for getting the tide*/
 .search-tides {
-  background-color: rgb(16, 176, 224);
+  background-color: rgb(198, 209, 212);
   border: none;
-  color: white;
+  color: rgb(22, 9, 9);
   text-align: center;
   text-decoration: none;
   letter-spacing: 5px;
@@ -44,16 +46,17 @@
 .tide-title {
   grid-area: header;
   font-family: Helvetica;
-  color: whitesmoke;
-  letter-spacing: 1em;
+  color: black;
+  letter-spacing: 0.8em;
   text-align: center;
-  font-size: 5vw;
+  font-size: 6vw;
   font-weight: lighter;
 }
 
 .main-content {
   /*i want this to be the flexbox or contain a flexbox*/
   grid-area: main;
+  padding: 3%;
 }
 
 .bottom-wave {
@@ -62,9 +65,17 @@
 
 .grid-container {
   display: grid;
-  background-color: rgb(16, 176, 224);
+  /* background-color: rgb(16, 176, 224); */
+  background: #159957; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to right,
+    #155799,
+    #159957
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, #155799, #159957);
   height: 100vh;
-  overflow: hidden; /*to clip the extra wave animation*/
+  overflow: hidden;
+  /*to clip the extra wave animation*/
   grid-template-columns: 20% 20% 20% 20% 20%;
   grid-template-rows: auto;
   grid-template-areas:
@@ -75,16 +86,17 @@
 }
 
 /*mobile styles for grid*/
-/* @media only screen and (max-width: 550px) {
+@media only screen and (max-width: 550px) {
   .grid-container {
-    grid-template-columns: 1fr 1fr 1fr;
+    padding: 30px;
+    grid-template-columns: 1fr;
     grid-template-rows: auto;
-    grid-template-areas: 
-      ". header ."
-      ". main ."
-      "bottom bottom bottom";
+    grid-template-areas:
+      "header"
+      "main"
+      "bottom";
   }
-} */
+}
 
 .loader-container {
   display: flex;
