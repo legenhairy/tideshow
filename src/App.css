@@ -24,10 +24,9 @@
 
 .chart-container {
   display: flex;
-  /* justify-content: center;
-  align-items: center; */
+  flex-direction: column;
+  align-items: center;
   margin: 0.5em;
-  height: 40%;
   /* width: auto; */
   background-color: rgb(214, 236, 218);
 }
@@ -56,7 +55,7 @@
 .main-content {
   /*i want this to be the flexbox or contain a flexbox*/
   grid-area: main;
-  padding: 3%;
+  padding: 2vh;
 }
 
 .bottom-wave {
@@ -88,7 +87,6 @@
 /*mobile styles for grid*/
 @media only screen and (max-width: 550px) {
   .grid-container {
-    padding: 30px;
     grid-template-columns: 1fr;
     grid-template-rows: auto;
     grid-template-areas:
@@ -100,8 +98,8 @@
 
 .loader-container {
   display: flex;
-  align-items: "center";
-  justify-content: "center";
+  align-items: center;
+  justify-content: center;
   height: 100vh;
   width: 100vw;
   background: turquoise;

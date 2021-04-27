@@ -6,9 +6,11 @@ import Lottie from "react-lottie";
 import loader from "./lotties/water-loader.json";
 import Waves from "./components/Waves";
 import WaveLoader from "./components/WaveLoader";
-import DataTable from "./components/DataTable";
-import CsvDownloader from "react-csv-downloader";
+// import DataTable from "./components/DataTable";
+// import CsvDownloader from "react-csv-downloader";
 import Button from "react-bootstrap/Button";
+import { IoMdArrowRoundBack } from "react-icons/io";
+import { FcCalendar, FcClock, FcGlobe, FcRuler } from "react-icons/fc";
 
 let startDay = new Date().getDate();
 let startMonth = new Date().getMonth() + 1;
@@ -21,6 +23,15 @@ if (startDay < 10) {
 //i wonder if i pass the last day of the current month, will i move on to the next month number? yes, i get it!
 let day2 = new Date();
 day2.setDate(day2.getDate() + 7);
+
+// let endDay = day2.getDate();
+// console.log(endDay);
+// if (day2.getDate() < 10) {
+//   endDay = "0" + endDay.toString();
+// }
+
+// console.log("formatted day is now:", endDay);
+
 let endMonth = day2.getMonth() + 1;
 
 const initialValues = {
@@ -45,6 +56,7 @@ function App() {
   const [dates, setDates] = useState(initialValues);
   const [isLoading, setIsLoading] = useState(false);
   const [showChart, setShowChart] = useState(false); //for the rendering of the chart first time, then each state update just rerenders the chart
+  const [showOptions, setShowOptions] = useState(true);
 
   const getData = () => {
     setIsLoading(true); //trigger the loading screen
@@ -63,8 +75,16 @@ function App() {
 
     let fromDate = today.getFullYear().toString() + mon + dates.start; //the updated fromDay
     console.log("the from date is: " + fromDate);
-    /*by default, set the end date 7 days after the fromDate*/
-    let toDate = today.getFullYear().toString() + mon + dates.end;
+    /*by default, set the end date 7 days after the fromDate, format the single digit nums with a 0 */
+    let endDate = dates.end;
+    if (endDate < 10) {
+      endDate = "0" + endDate.toString();
+    }
+    let endMon = dates.toMonth;
+    if (endMon < 10) {
+      endMon = "0" + endMon.toString();
+    }
+    let toDate = today.getFullYear().toString() + endMon + endDate;
 
     //make the api call for the noaa tide prediction api
     const axioOptions = {
@@ -195,6 +215,7 @@ function App() {
     if (showChart === false) {
       //i dont want the button to act like a toggle between on and off
       setShowChart(true);
+      setShowOptions(false);
     }
   };
 
@@ -203,6 +224,12 @@ function App() {
     console.log("name", name);
     console.log("value", value);
     setDates({ ...dates, [name]: value });
+  };
+
+  /* clicking the back button will show the options container instead and hide the chart container*/
+  const handleBack = (e) => {
+    setShowOptions(true);
+    setShowChart(false);
   };
 
   // const columns = [
@@ -237,194 +264,220 @@ function App() {
         <div className="main-content">
           {showChart ? (
             <div className="chart-container">
+              <Button variant="primary" size="lg" onClick={handleBack}>
+                <IoMdArrowRoundBack /> Edit
+              </Button>
+              {/* <CsvDownloader
+                filename="tide-data"
+                separator=";"
+                text="CSV DOWNLOAD"
+                columns={columns}
+                data={tideData}
+              /> */}
               <Line data={tideData} options={options} />
             </div>
           ) : null}
-          <div class="container filter-container">
-            <div class="row top-row">
-              <div class="col-md-6 mb-3">
-                <label htmlFor="station">Station Name</label>
-                <select class="form-select shadow" onChange={changeStation}>
-                  <option value="9414290">9414290 San Francisco</option>
-                  <option value="9413745">
-                    9413745 Santa Cruz, Monterey Bay,CA
-                  </option>
-                  <option value="9414275">
-                    9414275 Ocean Beach, Outer Coast, CA
-                  </option>
-                  <option value="9414806">
-                    9414806 Sausalito, San Francisco, CA
-                  </option>
-                </select>
+          {showOptions ? (
+            <div class="container filter-container">
+              <div class="row top-row">
+                <div class="col-md-6 mb-3">
+                  <label htmlFor="station">Station Name</label>
+                  <FcGlobe />
+                  <select class="form-select shadow" onChange={changeStation}>
+                    <option value="9414290">9414290 San Francisco, CA</option>
+                    <option value="9415020">9415020 Point Reyes, CA</option>
+                    <option value="9413745">
+                      9413745 Santa Cruz, Monterey Bay,CA
+                    </option>
+                    <option value="9414275">
+                      9414275 Ocean Beach, Outer Coast, CA
+                    </option>
+                    <option value="9414806">
+                      9414806 Sausalito, San Francisco, CA
+                    </option>
+                    <option value="9415141">9415141 Davis Point, CA</option>
+                    <option value="9412110">9412110 Port San Luis, CA</option>
+                    <option value="9411340">9411340 Santa Barbara, CA</option>
+                    <option value="9413450">9413450 Monterey, CA</option>
+                    <option value="9414750">9414750 Alameda, CA</option>
+                    <option value="9414750">9447130 Seattle, WA</option>
+                    <option value="9441102">9441102 Westport, WA</option>
+                    <option value="9444900">9444900 Port Townsend, WA</option>
+                  </select>
+                </div>
+                <div class="col-md-3 mb-3">
+                  <label htmlFor="from-month">From:</label>
+                  <FcCalendar />
+                  <select
+                    class="form-select shadow mb-1"
+                    name="fromMonth"
+                    onChange={handleDayChange}
+                    value={dates.fromMonth}
+                  >
+                    <option value="1">January</option>
+                    <option value="2">Feburary</option>
+                    <option value="3">March</option>
+                    <option value="4">April</option>
+                    <option value="5">June</option>
+                    <option value="6">July</option>
+                    <option value="7">August</option>
+                    <option value="September">September</option>
+                    <option value="October">October</option>
+                    <option value="November">November</option>
+                    <option value="December">December</option>
+                  </select>
+                  <select
+                    class="form-select shadow"
+                    name="start"
+                    onChange={handleDayChange}
+                    value={dates.start}
+                  >
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                    <option value="13">13</option>
+                    <option value="14">14</option>
+                    <option value="15">15</option>
+                    <option value="16">16</option>
+                    <option value="17">17</option>
+                    <option value="18">18</option>
+                    <option value="19">19</option>
+                    <option value="20">20</option>
+                    <option value="21">21</option>
+                    <option value="22">22</option>
+                    <option value="23">23</option>
+                    <option value="24">24</option>
+                    <option value="25">25</option>
+                    <option value="26">26</option>
+                    <option value="27">27</option>
+                    <option value="28">28</option>
+                    <option value="29">29</option>
+                  </select>
+                </div>
+                <div class="col-md-3 mb-3">
+                  <label htmlFor="to-month">To:</label>
+                  <FcCalendar />
+                  <select
+                    class="form-select shadow mb-1"
+                    name="toMonth"
+                    onChange={handleDayChange}
+                    value={dates.toMonth}
+                  >
+                    <option value="1">January</option>
+                    <option value="2">Feburary</option>
+                    <option value="3">March</option>
+                    <option value="4">April</option>
+                    <option value="5">June</option>
+                    <option value="6">July</option>
+                    <option value="7">August</option>
+                    <option value="8">September</option>
+                    <option value="9">October</option>
+                    <option value="November">November</option>
+                    <option value="December">December</option>
+                  </select>
+                  <select
+                    class="form-select shadow"
+                    name="end"
+                    onChange={handleDayChange}
+                    value={dates.end}
+                  >
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                    <option value="13">13</option>
+                    <option value="14">14</option>
+                    <option value="15">15</option>
+                    <option value="16">16</option>
+                    <option value="17">17</option>
+                    <option value="18">18</option>
+                    <option value="19">19</option>
+                    <option value="20">20</option>
+                    <option value="21">21</option>
+                    <option value="22">22</option>
+                    <option value="23">23</option>
+                    <option value="24">24</option>
+                    <option value="25">25</option>
+                    <option value="26">26</option>
+                    <option value="27">27</option>
+                    <option value="28">28</option>
+                    <option value="29">29</option>
+                    <option value="30">30</option>
+                  </select>
+                </div>
               </div>
-              <div class="col-md-3 mb-3">
-                <label htmlFor="from-month">From:</label>
-                <select
-                  class="form-select shadow mb-1"
-                  name="fromMonth"
-                  onChange={handleDayChange}
-                  value={dates.fromMonth}
+              {/* 2nd row with the other elements seperated out in col-3 pieces */}
+              <div class="row bottom-row">
+                <div class="col-md-4 mb-3">
+                  <label htmlFor="units">Units</label>
+                  <FcRuler />
+                  <select
+                    class="form-select shadow"
+                    required
+                    onChange={handleUnits}
+                  >
+                    <option value="Meters">Meters</option>
+                    <option value="Feet">Feet</option>
+                  </select>
+                </div>
+                <div class="col-md-4 mb-3">
+                  <label htmlFor="timezone">Timezone</label>
+                  <FcClock />
+                  <select
+                    class="form-select shadow"
+                    required
+                    onChange={changeTimeZone}
+                  >
+                    <option value="gmt">gmt</option>
+                    <option value="lst">lst</option>
+                    <option value="lst_ldt">lst_ldt</option>
+                  </select>
+                </div>
+                <div class="col-md-4 mb-3">
+                  <label htmlFor="datum">Datum</label>
+                  <select
+                    class="form-select shadow"
+                    required
+                    onChange={changeDatum}
+                  >
+                    <option value="MHHW">MHHW</option>
+                    <option value="MHW">MHW</option>
+                    <option value="MTL">MTL</option>
+                    <option value="MLLW">MLLW</option>
+                  </select>
+                </div>
+                <Button
+                  className="search-tides"
+                  variant="primary"
+                  disabled={isLoading}
+                  onClick={!isLoading ? getData : null}
                 >
-                  <option value="1">January</option>
-                  <option value="2">Feburary</option>
-                  <option value="3">March</option>
-                  <option value="4">April</option>
-                  <option value="5">June</option>
-                  <option value="6">July</option>
-                  <option value="7">August</option>
-                  <option value="September">September</option>
-                  <option value="October">October</option>
-                  <option value="November">November</option>
-                  <option value="December">December</option>
-                </select>
-                <select
-                  class="form-select shadow"
-                  name="start"
-                  onChange={handleDayChange}
-                  value={dates.start}
-                >
-                  <option value="1">1</option>
-                  <option value="2">2</option>
-                  <option value="3">3</option>
-                  <option value="4">4</option>
-                  <option value="5">5</option>
-                  <option value="6">6</option>
-                  <option value="7">7</option>
-                  <option value="8">8</option>
-                  <option value="9">9</option>
-                  <option value="10">10</option>
-                  <option value="11">11</option>
-                  <option value="12">12</option>
-                  <option value="13">13</option>
-                  <option value="14">14</option>
-                  <option value="15">15</option>
-                  <option value="16">16</option>
-                  <option value="17">17</option>
-                  <option value="18">18</option>
-                  <option value="19">19</option>
-                  <option value="20">20</option>
-                  <option value="21">21</option>
-                  <option value="22">22</option>
-                  <option value="23">23</option>
-                  <option value="24">24</option>
-                  <option value="25">25</option>
-                  <option value="26">26</option>
-                  <option value="27">27</option>
-                  <option value="28">28</option>
-                  <option value="29">29</option>
-                </select>
-              </div>
-              <div class="col-md-3 mb-3">
-                <label htmlFor="to-month">To:</label>
-                <select
-                  class="form-select shadow mb-1"
-                  name="toMonth"
-                  onChange={handleDayChange}
-                  value={dates.toMonth}
-                >
-                  <option value="1">January</option>
-                  <option value="2">Feburary</option>
-                  <option value="3">March</option>
-                  <option value="4">April</option>
-                  <option value="5">June</option>
-                  <option value="6">July</option>
-                  <option value="7">August</option>
-                  <option value="8">September</option>
-                  <option value="9">October</option>
-                  <option value="November">November</option>
-                  <option value="December">December</option>
-                </select>
-                <select
-                  class="form-select shadow"
-                  name="end"
-                  onChange={handleDayChange}
-                  value={dates.end}
-                >
-                  <option value="1">1</option>
-                  <option value="2">2</option>
-                  <option value="3">3</option>
-                  <option value="4">4</option>
-                  <option value="5">5</option>
-                  <option value="6">6</option>
-                  <option value="7">7</option>
-                  <option value="8">8</option>
-                  <option value="9">9</option>
-                  <option value="10">10</option>
-                  <option value="11">11</option>
-                  <option value="12">12</option>
-                  <option value="13">13</option>
-                  <option value="14">14</option>
-                  <option value="15">15</option>
-                  <option value="16">16</option>
-                  <option value="17">17</option>
-                  <option value="18">18</option>
-                  <option value="19">19</option>
-                  <option value="20">20</option>
-                  <option value="21">21</option>
-                  <option value="22">22</option>
-                  <option value="23">23</option>
-                  <option value="24">24</option>
-                  <option value="25">25</option>
-                  <option value="26">26</option>
-                  <option value="27">27</option>
-                  <option value="28">28</option>
-                  <option value="29">29</option>
-                  <option value="30">30</option>
-                </select>
+                  {isLoading ? (
+                    <Lottie options={defaultOptions} />
+                  ) : (
+                    "GET YOUR TIDE"
+                  )}
+                </Button>
               </div>
             </div>
-            {/* 2nd row with the other elements seperated out in col-3 pieces */}
-            <div class="row bottom-row">
-              <div class="col-md-4 mb-3">
-                <label htmlFor="units">Units</label>
-                <select
-                  class="form-select shadow"
-                  required
-                  onChange={handleUnits}
-                >
-                  <option value="Meters">Meters</option>
-                  <option value="Feet">Feet</option>
-                </select>
-              </div>
-              <div class="col-md-4 mb-3">
-                <label htmlFor="timezone">Timezone</label>
-                <select
-                  class="form-select shadow"
-                  required
-                  onChange={changeTimeZone}
-                >
-                  <option value="gmt">gmt</option>
-                  <option value="lst">lst</option>
-                  <option value="lst_ldt">lst_ldt</option>
-                </select>
-              </div>
-              <div class="col-md-4 mb-3">
-                <label htmlFor="timezone">Datum</label>
-                <select
-                  class="form-select shadow"
-                  required
-                  onChange={changeDatum}
-                >
-                  <option value="MHHW">MHHW</option>
-                  <option value="MHW">MHW</option>
-                  <option value="MTL">MTL</option>
-                  <option value="MLLW">MLLW</option>
-                </select>
-              </div>
-              <Button
-                className="search-tides"
-                variant="primary"
-                disabled={isLoading}
-                onClick={!isLoading ? getData : null}
-              >
-                {isLoading ? (
-                  <Lottie options={defaultOptions} />
-                ) : (
-                  "GET YOUR TIDE"
-                )}
-              </Button>
-            </div>
-          </div>
+          ) : null}
         </div>
         <div className="bottom-wave">
           {/* wrap the animated wave with a container- looks better visually, otherwise it looks cut off*/}
