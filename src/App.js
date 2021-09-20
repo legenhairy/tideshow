@@ -5,7 +5,6 @@ import axios from "axios";
 import Lottie from "react-lottie";
 import loader from "./lotties/water-loader.json";
 import Waves from "./components/Waves";
-import WaveLoader from "./components/WaveLoader";
 // import DataTable from "./components/DataTable";
 // import CsvDownloader from "react-csv-downloader";
 import Button from "react-bootstrap/Button";
@@ -149,7 +148,7 @@ function App() {
       display: true,
       text: [
         `Tide Levels in ${selectUnits}`,
-        `Tide Predictions at ${station}, San Francisco Station`,
+        `Tide Predictions at ${station} Station`,
       ],
       fontFamily: "Arial",
     },
@@ -175,7 +174,7 @@ function App() {
           scaleLabel: {
             display: true,
             fontStyle: "bold",
-            labelString: "Day/ Time of Tide",
+            labelString: "Day/Time of Tide",
           },
         },
       ],
@@ -318,13 +317,14 @@ function App() {
                     <option value="2">Feburary</option>
                     <option value="3">March</option>
                     <option value="4">April</option>
-                    <option value="5">June</option>
-                    <option value="6">July</option>
-                    <option value="7">August</option>
-                    <option value="September">September</option>
-                    <option value="October">October</option>
-                    <option value="November">November</option>
-                    <option value="December">December</option>
+                    <option value="5">May</option>
+                    <option value="6">June</option>
+                    <option value="7">July</option>
+                    <option value="8">August</option>
+                    <option value="9">September</option>
+                    <option value="10">October</option>
+                    <option value="11">November</option>
+                    <option value="12">December</option>
                   </select>
                   <select
                     class="form-select shadow"
@@ -361,6 +361,8 @@ function App() {
                     <option value="27">27</option>
                     <option value="28">28</option>
                     <option value="29">29</option>
+                    <option value="30">30</option>
+                    <option value="31">31</option>
                   </select>
                 </div>
                 <div class="col-md-3 mb-3">
@@ -376,13 +378,14 @@ function App() {
                     <option value="2">Feburary</option>
                     <option value="3">March</option>
                     <option value="4">April</option>
-                    <option value="5">June</option>
-                    <option value="6">July</option>
-                    <option value="7">August</option>
-                    <option value="8">September</option>
-                    <option value="9">October</option>
-                    <option value="November">November</option>
-                    <option value="December">December</option>
+                    <option value="5">May</option>
+                    <option value="6">June</option>
+                    <option value="7">July</option>
+                    <option value="8">August</option>
+                    <option value="9">September</option>
+                    <option value="10">October</option>
+                    <option value="11">November</option>
+                    <option value="12">December</option>
                   </select>
                   <select
                     class="form-select shadow"
