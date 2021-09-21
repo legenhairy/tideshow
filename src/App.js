@@ -302,6 +302,7 @@ function App() {
                     <option value="9414750">9447130 Seattle, WA</option>
                     <option value="9441102">9441102 Westport, WA</option>
                     <option value="9444900">9444900 Port Townsend, WA</option>
+                    <option value="8518750">8518750 The Battery, NY</option>
                   </select>
                 </div>
                 <div class="col-md-3 mb-3">
